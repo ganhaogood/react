@@ -63,6 +63,18 @@ router.post("/login",function (req,res) {
   })
 
 })
+router.post('/update', function (req, res) {
+  const userid = req.cookies.userid
+  if (!userid) {
+    return res.send({code: 1, msg: '请先登陆'});
+  }
+  UserModel.findByIdAndUpdate({_id: userid}, req.body, function (err, user) {
+    const {_id, username, type} = user
+    const data = Object.assign(req.body, {_id, username, type})
+    res.send({code: 0, data})
+  })
+})
+
 
 
 
