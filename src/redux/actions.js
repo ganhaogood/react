@@ -11,6 +11,8 @@ import {
   RECEIVE_USER,
   RESET_USER
 } from './action-types'
+import {reqUserList} from "../../../180524_gzhipin-client/src/api";
+import {receiveUserList} from "../../../180524_gzhipin-client/src/redux/actions";
 const authSuccess = (user) => ({type: AUTH_SUCCESS, data:user})
 const errorMsg = (msg) => ({type: ERROR_MSG, data:msg})
 const receiveUser = (user) => ({type: RECEIVE_USER, data: user})
@@ -72,6 +74,16 @@ export function updateUser(user) {
     } else {
       const msg = result.msg
       dispatch(resetUser(msg))
+    }
+  }
+}
+export function getUserList(type) {
+  return async dispatch => {
+    const response = await reqUserList(type)
+    const result = response.data
+    if(result.code===0) {
+      const userList = result.data
+      dispatch(receiveUserList(userList))
     }
   }
 }

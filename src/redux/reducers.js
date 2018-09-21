@@ -9,6 +9,7 @@ import {
   RECEIVE_USER,
   RESET_USER
 } from './action-types'
+import {RECEIVE_USER_LIST} from "../../../180524_gzhipin-client/src/redux/action-types";
 const initUser = {
   username: '',
   type: '',
@@ -31,10 +32,19 @@ function user (state=initUser, action) {
       return state
   }
 }
-
+const initUserList = []
+function userList (state=initUserList, action) {
+  switch (action.type) {
+    case RECEIVE_USER_LIST:
+      return action.data
+    default:
+      return state
+  }
+}
 
 
 
 export default combineReducers({
-  user
+  user,
+  userList
 })

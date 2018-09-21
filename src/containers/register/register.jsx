@@ -1,45 +1,61 @@
-import React,{Component} from "react"
-import {NavBar,WingBlank,List,WhiteSpace,InputItem,Radio,Button} from "antd-mobile"
+import React, {Component} from 'react'
+import {NavBar, WingBlank, List, WhiteSpace, InputItem, Radio, Button} from 'antd-mobile'
+import {Redirect} from 'react-router-dom'
+import {connect} from 'react-redux'
 
-import Logo from "../../componnets/logo/logo"
+import {register} from '../../redux/actions'
+import Logo from '../../componnets/logo/logo'
 
+const ListItem = List.Item
+class Register extends Component {
 
-const ListItem=List.Item
-
-export default class Register extends Component{
-  state={
-    username:"",
-    password:"",
-    password2:"",
-    type:"dashen"
+  state = {
+    username: '',
+    password: '',
+    password2: '',
+    type: 'dashen'
   }
-  handleChange=(name,value)=>{
+  handleChange = (name, value) => {
     this.setState({
-      [name]:value
+      [name]: value
     })
   }
-  register=()=>{
+  register = () => {
     console.log(this.state)
-  }
-  goLogin=()=>{
-    this.props.history.replace("/login")
+    this.props.register(this.state)
   }
 
+  goLogin = () => {
+    this.props.history.replace('/login')
+  }
 
-  render(){
-    const {type}=this.state
-    return(
+  render () {
+    const {type} = this.state
+    const {msg, redirectTo} = this.props.user
+    if(redirectTo) {
+      return <Redirect to={redirectTo}></Redirect>
+    }
+
+    return (
       <div>
         <NavBar>硅谷直聘</NavBar>
         <Logo/>
         <WingBlank>
           <List>
+            {msg ? <p className='error-msg'>{msg}</p> : null}
             <InputItem
               placeholder='请输入用户名'
-              onChange={val=>this.handleChange("username",val)}>用户名:
+              onChange={val=> this.handleChange('username', val)}
+            >
+              用户名:
             </InputItem>
             <WhiteSpace/>
-            <InputItem type="password" placeholder="请输入密码" onChange={val=>this.handleChange("password",val)}>密码:
+            <InputItem
+              type='password'
+              placeholder='请输入密码'
+              onChange={val=> this.handleChange('password', val)}
+            >
+              密码:
             </InputItem>
             <WhiteSpace/>
             <InputItem type='password' placeholder='请输入确认密码' onChange={val=> this.handleChange('password2', val)}>确认密码: </InputItem>
@@ -58,5 +74,9 @@ export default class Register extends Component{
       </div>
     )
   }
-
 }
+
+export default connect(
+  state => ({user: state.user}),
+  {register}
+)(Register)
